@@ -16,9 +16,6 @@ plushboard.sarto.dev {
 	handle /api/* {
 		reverse_proxy plushboard-backend:8000
 	}
-	handle /auth/* {
-		reverse_proxy plushboard-backend:8000
-	}
 	handle /mcp/* {
 		reverse_proxy plushboard-backend:8000
 	}

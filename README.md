@@ -12,19 +12,20 @@ image on ghcr) and
 git clone https://github.com/SartoRiccardo/plushboard-infra && cd plushboard-infra
 cp secrets/.env.app.example secrets/.env.app   # then fill it
 cp .env.example .env                           # set CADDY_DIR + FRONTEND_TAG
-docker compose pull && docker compose up -d
-./update-frontend.sh $FRONTEND_TAG             # pulls the SPA + installs the Caddy site
+docker compose pull && docker compose up -d    # backend (API) on the reverse-proxy network
+./update-frontend.sh $FRONTEND_TAG             # SPA into the central Caddy + site config
 ```
 
 Requires: the central Caddy container joined to the `reverse-proxy` network,
 Cloudflare DNS `plushboard.sarto.dev` → VPS (TLS mode "Full" for the host),
-and `https://plushboard.sarto.dev/auth/callback` in the GCP OAuth client.
+and `https://plushboard.sarto.dev/api/auth/callback` in the GCP OAuth client.
 
-## Data (never in this repo)
+## Data
 
-The SQLite database lives in the `backend_data` volume — carry it over from
-the dev machine with `scp data/plushboard.db vps:/var/lib/docker/volumes/plushboard-infra_backend_data/_data/`
-(or any staging path you own). Ledger seeds and exports stay out of git.
+SQLite lives in the `backend_data` volume. To carry over the dev machine's
+history: `scp data/plushboard.db` from the dev checkout into the volume path
+(`docker volume inspect plushboard-infra_backend_data`) and restart the
+backend. Ledger seeds/exports stay out of this repo.
 
 ## Updating
 

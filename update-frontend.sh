@@ -3,10 +3,10 @@
 # SartoRiccardo/plushboard-front (built by its release workflow on every tag
 # push), unpacks it into ./frontend-dist, and - if CADDY_DIR is set (see .env)
 # - copies it into the central Caddy's roots/plushboard, plus copies Caddyfile
-# into its sites/, and reloads Caddy.
+# into its sites/plushboard.Caddyfile, and reloads Caddy.
 #
-# Usage: ./update-frontend.sh 1.0.0
-#    or: FRONTEND_TAG=1.0.0 ./update-frontend.sh
+# Usage: ./update-frontend.sh 0.1.0
+#    or: FRONTEND_TAG=0.1.0 ./update-frontend.sh
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
