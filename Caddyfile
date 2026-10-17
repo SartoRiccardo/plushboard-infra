@@ -1,0 +1,27 @@
+# Site snippet for the VPS's central Caddy (not run from this repo).
+# update-frontend.sh copies this file into its sites/ dir (and frontend-dist/
+# into its roots/ dir) whenever CADDY_DIR is set in .env - see that script.
+#
+# Requires: the central Caddy container is attached to the external
+# `reverse-proxy` network (see compose.yaml) so it can resolve
+# `plushboard-backend` by name.
+#
+# TLS: self-signed (no ACME) - Cloudflare sits in front and doesn't validate
+# the cert chain, it just needs a TLS handshake. The sarto.dev zone's Cloudflare
+# TLS mode for this hostname must be "Full" (not "Full strict").
+
+plushboard.sarto.dev {
+	tls internal
+
+	handle /api/* {
+		reverse_proxy plushboard-backend:8000
+	}
+	handle /mcp/* {
+		reverse_proxy plushboard-backend:8000
+	}
+	handle {
+		root * /srv/roots/plushboard
+		try_files {path} /index.html
+		file_server
+	}
+}

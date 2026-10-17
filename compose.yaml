@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: ghcr.io/sartoriccardo/plushboard-back:${BACKEND_IMAGE_TAG:-latest}
+    container_name: plushboard-backend
+    restart: unless-stopped
+    env_file: secrets/.env.app
+    volumes:
+      # SQLite lives at /data/plushboard.db inside the container
+      - backend_data:/data
+    networks:
+      - plushboard
+      - reverse-proxy
+
+networks:
+  plushboard:
+  # the VPS's single central Caddy instance lives outside this repo - this
+  # network is how it reaches plushboard-backend by name (see Caddyfile)
+  reverse-proxy:
+    external: true
+
+volumes:
+  backend_data:
